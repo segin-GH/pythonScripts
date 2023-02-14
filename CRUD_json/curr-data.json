@@ -1,8 +1,7 @@
 {
   "totalSlaves": 2,
-  
   "MSTR": {
-    "isConnected": false,
+    "isConnected": true,
     "DEV1": "PDB"
   },
   "SLV1": {

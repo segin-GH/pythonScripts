@@ -41,7 +41,16 @@ import json
 with open('setting.json','r') as f:
     data = json.load(f)
 
+
 data["MSTR"]["isConnected"] = True
+data["MSTR"]["timeStamp"] = 1676383622
+
+data["SLV3"] = {
+    "isConnected":True,
+    "DEV1": "ACS",
+    "DEV2": "FP"
+}
+data["totalDevices"] = 5
 
 with open(".config.json", 'w') as f:
     json.dump(data, f, indent=2) 

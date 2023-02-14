@@ -53,4 +53,4 @@ data["SLV3"] = {
 data["totalDevices"] = 5
 
 with open(".config.json", 'w') as f:
-    json.dump(data, f, indent=2) 
+    json.dump(data, f, indent=4) 

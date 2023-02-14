@@ -38,10 +38,10 @@ import json
 # print(slv1)
 # print(slv2)
 
-with open('data.json','r') as f:
+with open('setting.json','r') as f:
     data = json.load(f)
 
 data["MSTR"]["isConnected"] = True
 
-with open("curr-data.json", 'w') as f:
+with open(".config.json", 'w') as f:
     json.dump(data, f, indent=2) 

@@ -1,10 +1,16 @@
-[
-  {
-    "name": "SLAVE1",
-    "age": "40"
+{
+  "MSTR": {
+    "isConnected": false,
+    "DEV1": "PDB"
   },
-  {
-    "name": "SLAVE",
-    "age": "20"
+  "SLV1": {
+    "isConnected": false,
+    "DEV1": "CAS1",
+    "DEV2": "CAS2"
+  },
+  "SLV2": {
+    "isConnected": false,
+    "DEV1": "CAS3",
+    "DEV2": "CAS4"
   }
-]
+}

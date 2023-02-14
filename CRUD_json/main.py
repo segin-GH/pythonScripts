@@ -1,17 +1,26 @@
 import json
 
 # Storing data in a list of dictionaries
-data = [
-    {
-        "name": "JOHN",
-        "age": "40"
+
+data = {
+
+    "MSTR": {
+        "isConnected": False,
+        "DEV1": "PDB"
     },
 
-    {
-        "name": "JSON",
-        "age":"20"
+    "SLV1": {
+        "isConnected": False,
+        "DEV1": "CAS1",
+        "DEV2": "CAS2"
+    },
+
+    "SLV2": {
+        "isConnected": False,
+        "DEV1": "CAS3",
+        "DEV2": "CAS4"
     }
-]
+}
 
 # Writing the data to a JSON file with indentation
 with open("data.json", "w") as f:

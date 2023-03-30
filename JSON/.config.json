@@ -1,7 +1,8 @@
 {
     "MSTR": {
-        "isConnected": false,
-        "DEV1": "PDB"
+        "isConnected": true,
+        "DEV1": "PDB",
+        "timeStamp": 1676383622
     },
     "SLV1": {
         "isConnected": false,
@@ -13,5 +14,10 @@
         "DEV1": "CAS3",
         "DEV2": "CAS4"
     },
-    "totalDevices": 3
+    "SLV3": {
+        "isConnected": true,
+        "DEV1": "ACS",
+        "DEV2": "FP"
+    },
+    "totalDevices": 5
 }

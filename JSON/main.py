@@ -44,34 +44,38 @@ import json
 
 # **********************************************************************
 
-with open('setting.json', 'r') as f:
+# # read a json file and change the value and save it in a new file
+
+# with open('setting.json', 'r') as f:
+#     data = json.load(f)
+
+# data["MSTR"]["isConnected"] = True
+# data["MSTR"]["timeStamp"] = 1676383622
+
+# data["SLV3"] = {
+#     "isConnected": True,
+#     "DEV1": "ACS",
+#     "DEV2": "FP"
+# }
+# data["totalDevices"] = 5
+
+# with open("data.json", 'w') as f:
+#     json.dump(data, f, indent=4)
+
+
+# **********************************************************************
+
+with open("setting.json", 'r') as f:
     data = json.load(f)
 
-data["MSTR"]["isConnected"] = True
-data["MSTR"]["timeStamp"] = 1676383622
+keys = data.keys()
+count = 0
 
-data["SLV3"] = {
-    "isConnected": True,
-    "DEV1": "ACS",
-    "DEV2": "FP"
-}
-data["totalDevices"] = 5
+for key in keys:
+    count = count + 1
+    print(key)
+
+data["totalDevices"] = count
 
 with open(".config.json", 'w') as f:
     json.dump(data, f, indent=4)
-
-
-# with open("setting.json",'r') as f:
-#     data = json.load(f)
-
-# keys = data.keys()
-# count = 0
-
-# for key in keys:
-#     count = count + 1
-#     print(key)
-
-# data["totalDevices"] = count
-
-# with open(".config.json", 'w') as f:
-#     json.dump(data, f, indent=4)

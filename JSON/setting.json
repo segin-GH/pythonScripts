@@ -12,5 +12,10 @@
     "isConnected": false,
     "DEV1": "CAS3",
     "DEV2": "CAS4"
+  },
+  "SLV3": {
+    "isConnected": false,
+    "DEV1": "ACS",
+    "DEV2": "FP"
   }
 }

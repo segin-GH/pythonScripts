@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 
 import serial
 import serial.tools.list_ports
@@ -42,9 +43,12 @@ class Cerial:
         data = self.ser.readline()
         return data.decode()
 
+    def read_all(self):
+        data = self.ser.readline().decode('utf-8').strip()
+        return data
 
 if __name__ == "__main__":
     # can also be used as a script
     cerialOne = Cerial()
     while (True):
-        cerialOne.read_line()
+        cerialOne.read_all()

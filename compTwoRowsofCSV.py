@@ -20,5 +20,3 @@ not_in_df1 = df1[~df1.iloc[:, 0].isin(df2.iloc[:, 0])]
 
 # Print the result
 print(not_in_df1.iloc[:, 0])
-
-

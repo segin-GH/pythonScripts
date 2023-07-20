@@ -1,7 +1,6 @@
 #! /usr/bin/python3
 
 import csv
-import os
 import tabulate
 import sys
 

@@ -11,7 +11,7 @@ def print_logfile_tabulate(file):
     with open(file, "r") as f:
         csv_reader = csv.reader(f)
         rows = list(csv_reader)
-        print(tabulate(rows, tablefmt="pipe"))
+        print(tabulate.tabulate(rows, tablefmt="pipe"))
         
 if __name__ == "__main__":
     # get the file need to be printed as args

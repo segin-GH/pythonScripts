@@ -15,6 +15,6 @@ def print_true_colors():
 
 
 if __name__=="__main__":
-    print_256_colors()
-    # print_true_colors()
+    #print_256_colors()
+     print_true_colors()
 

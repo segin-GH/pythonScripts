@@ -17,6 +17,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         if self.path == "/":
             self.path = DEFAULT_FILE
         return super().do_GET()
+    
+    def do_post(self):
+        pass
 
 
 def start_server(website_directory):

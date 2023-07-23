@@ -27,7 +27,12 @@ def start_server(website_directory):
     os.chdir(website_directory)  # Change to the directory containing your web application
     with socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler) as httpd:
         print(f"Serving at port {PORT}")
-        httpd.serve_forever()
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\nShutting down the server...")
+            httpd.shutdown()
+            print("Server shut down successfully.")
 
 
 if __name__ == "__main__":

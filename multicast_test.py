@@ -5,8 +5,8 @@ import struct
 # the multicast address you're so fond of
 multicast_group = '232.10.10.10'
 port = 3333
-#message = binascii.unhexlify('010008100102030405060708')  # your secret hex message
-message = binascii.unhexlify('000008000102030405060708')  # your secret hex message
+message = binascii.unhexlify('010008100102030405060708')  # your secret hex message
+#message = binascii.unhexlify('000008000102030405060708')  # your secret hex message
 
 # creating a socket like you're trying to make fire with two sticks
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)

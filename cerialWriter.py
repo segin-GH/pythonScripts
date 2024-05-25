@@ -50,5 +50,6 @@ class Cerial:
 if __name__ == "__main__":
     # can also be used as a script
     cerialOne = Cerial()
+    cerialOne.send_data("Hello World\n")
     while (True):
         cerialOne.read_all()

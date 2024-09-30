@@ -1,55 +1,104 @@
-#! /usr/bin/python3
-
-import serial
-import serial.tools.list_ports
+#! /usr/bin/env python3
 
 
-class Cerial:
-    # A class that handles all the serial stuff
+from serial import Serial
+from serial import SerialException
+from serial import SerialTimeoutException
 
-    def __init__(self, port=None, baudrate=115200, port_index=1):
-        # it creates an instance of serial.Serial class and sets the port and baudrate
-        if port is None:
-            print("Automatically Selecting port")
-            ports = serial.tools.list_ports.comports()
-            if (len(ports) == 0):
-                raise Exception("No Serial ports found.")
-            else:
-                print("Available ports:")
-                for i, port in enumerate(ports):
-                    print(f"{i+1}. {port.device}")
-                print(f"Connecting to {ports[port_index-1].device}")
-                self.ser = serial.Serial(ports[port_index-1].device, baudrate)
-                print(f"Connected to {ports[port_index-1].device}")
+import time
 
-        else:
-            self.ser = serial.Serial(port, baudrate)
 
-    def send_data(self, data):
-        # a function that write to the serial with "carriage return and new line"
-        self.ser.write(data.encode())
+class SerialWrap:
+    def __init__(self, port: str, baud: int = 115200, timeout: int = 0):
+        self.__ser = None
+        self.__serail_port = None
+        self.__serail_baud = None
 
-    def close_port(self):
-        # a function that closes the serial port
-        self.ser.close()
+        if not isinstance(port, str):
+            print("Error: port not valid")
+            return None
 
-    def read_until(self, termination='\n'):
-        # a function that reads data from the serial port until the termination character is found
-        data = self.ser.read_until(termination.encode())
+        if not isinstance(baud, int):
+            print("Error: baud not valid")
+            return None
+
+        try:
+            self.__ser = Serial(port, baud)
+            self.__serail_port = port
+            self.__serail_baud = baud
+
+        except ValueError:
+            print("How hard is it to provide proper values??")
+            return None
+        except SerialException:
+            print(f"Port not found! bro did you connect {port} it ?? ")
+            return None
+
+    def __del__(self):
+        self.close_port()
+
+    def send_hex(self, data: str, end_fmt: str = "\r\n"):
+        try:
+            # Convert each character in the string to its ASCII hex value
+            hex_data = "".join(
+                f"{ord(c):02X}" for c in data
+            )  # Convert each char to hex and concatenate
+
+            # Print the hex equivalent for debugging
+            print(f"Sending >> {hex_data}")
+
+            # Send the hex data over the serial interface, appending the end format
+            self.__ser.write(bytes.fromhex(hex_data))
+
+        except ValueError:
+            print(f"Error: '{data}' could not be converted to hex.")
+
+    def send_bytes(self, data):
+        try:
+            # print(f"Sending >> {data}")
+            self.__ser.write(bytearray(data))
+
+        except ValueError:
+            print(f"Error: '{data}' could not be sent.")
+
+    def send_asci(self):
+        pass
+
+    def read_until(self, term="\r\n"):
+        data = self.__ser.read_until(term.encode())
         return data.decode()
 
-    def read_line(self):
-        # a function that reads data from the serial port until a newline character is found
-        data = self.ser.readline()
-        return data.decode()
+    def read_until_timeout(self, timeout=2):
+        self.__ser.timeout = timeout  # Set the timeout in seconds
+        end_time = time.time() + timeout
+        data = b""
 
-    def read_all(self):
-        data = self.ser.readline().decode('utf-8').strip()
+        print(f"Reading data for up to {timeout} seconds...")
+        while time.time() < end_time:
+            try:
+                # Read one byte at a time
+                byte = self.__ser.read(1)
+                if byte:
+                    data += byte
+                else:
+                    # No data received, continue waiting
+                    pass
+            except SerialTimeoutException:
+                print("Read timeout.")
+                break
+
+        print("Finished reading.")
         return data
 
+    def close_port(self):
+        if self.__ser is not None and self.__ser.is_open:
+            print(f"Flushing and closing port {self.__serail_port}")
+            self.__ser.flush()  # Ensure all data is sent
+            self.__ser.close()  # Close the port
+
+
 if __name__ == "__main__":
-    # can also be used as a script
-    cerialOne = Cerial()
-    cerialOne.send_data("Hello World\n")
-    while (True):
-        cerialOne.read_all()
+    ser = SerialWrap("/dev/ttyUSB1", 115200)
+    ser.send_hex(data="F")
+    data = ser.read_until_timeout()
+    print(data)

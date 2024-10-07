@@ -1,3 +1,6 @@
+import os
+
+
 class BinaryFileReader:
     def __init__(self, file_path):
         self.file_path = file_path
@@ -26,6 +29,12 @@ class BinaryFileReader:
 
         # Return the byte in a list
         return list(data)
+
+    def get_total_packets(self, packet_size):
+        """Calculates the total number of packets based on the file size and packet size."""
+        file_size = os.path.getsize(self.file_path)
+        total_packets = (file_size + packet_size - 1) // packet_size  # ceiling division
+        return total_packets
 
 
 def main():

@@ -1,4 +1,5 @@
 import asyncio
+import os
 from bleak import BleakClient, BleakScanner
 from rich.console import Console
 from rich.prompt import Prompt
@@ -10,6 +11,10 @@ console = Console()
 # Replace with your device's name or address
 DEVICE_NAME = "BSS-12345678"
 CMD_CHARACTERISTIC_UUID = "0000FF01-0000-1000-8000-00805F9B34FB"  # Command UUID
+
+
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 async def find_device():
@@ -28,7 +33,7 @@ async def find_device():
 async def send_command(client, command):
     try:
         await client.write_gatt_char(CMD_CHARACTERISTIC_UUID, command.encode("utf-8"))
-        console.print(f"[bold yellow]> {command}[/bold yellow] ")
+        # console.print(f"[bold yellow]> {command}[/bold yellow] ")
     except Exception as e:
         console.print(f"[bold red]Error sending command:[/bold red] {e}")
 
@@ -36,7 +41,7 @@ async def send_command(client, command):
 async def receive_response(client):
     try:
         response = await client.read_gatt_char(CMD_CHARACTERISTIC_UUID)
-        console.print(f"[bold cyan]< {response.decode()} [/bold cyan] ")
+        console.print(f"[bold cyan]> {response.decode()}[/bold cyan] ")
         return response
     except Exception as e:
         console.print(f"[bold red]Error reading response:[/bold red] {e}")
@@ -59,12 +64,24 @@ async def interactive_ble():
             )
         )
         try:
+            previous_command = ""
             while True:
                 try:
                     command = Prompt.ask("[bold magenta]$[/bold magenta]")
                     if command.lower() == "exit":
                         break
+                    if command == "":
+                        continue
+                    if command == "clear":
+                        clear_screen()
+                        continue
+                    if command == "r":
+                        command = previous_command
+                    if command == "w":
+                        await receive_response(client)
+                        continue
 
+                    previous_command = command
                     await send_command(client, command)
                     await asyncio.sleep(0.5)
                     await receive_response(client)

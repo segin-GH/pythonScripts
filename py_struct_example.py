@@ -144,10 +144,10 @@ class FrameGenerator:
         return sha256_hash.hexdigest()
 
 
-if __name__ == "__main__":
+def start_ota_update(uart: SerialWrap, file_path: str):
     # Example Usage
     frame_gen = FrameGenerator()
-    ser = SerialWrap("/dev/ttyUSB1", 115200)
+    ser = uart
 
     soh = 0xAA
     ssoh = 0x01
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     eot = 0x55
     id = 1
 
-    reader = BinaryFileReader("app_update.bin")
+    reader = BinaryFileReader(file_path)
 
     reader.open_file()
     total_pack = reader.get_total_packets(512)
@@ -227,3 +227,8 @@ if __name__ == "__main__":
         soh, ssoh, ver, 0xF3, eot, id, bytes.fromhex(sha256)
     )
     ser.send_bytes(packed_frame)
+
+
+if __name__ == "__main__":
+    ser = SerialWrap("/dev/ttyUSB1", 115200)
+    start_ota_update(ser, "app_update.bin")

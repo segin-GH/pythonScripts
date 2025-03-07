@@ -16,6 +16,8 @@ class SerialWrap:
         self.__serial_baud = None
         self.__rx_thread = None
         self.__running = False  # Control the receive thread
+        self.__ANSI_GREEN = "\033[92m"
+        self.__ANSI_RESET = "\033[0m"
 
         if not isinstance(port, str):
             print("Error: port not valid")
@@ -44,7 +46,13 @@ class SerialWrap:
                 try:
                     data = self.__ser.read(self.__ser.in_waiting)  # Read available data
                     if data:
-                        print(f"{data.decode('utf-8', 'ignore')}")
+                        # Convert timestamp to human-readable format
+                        human_time = time.strftime(
+                            "%Y-%m-%d %H:%M:%S", time.localtime(time.time())
+                        )
+                        # Add green color using ANSI escape codes
+                        green_text = f"{self.__ANSI_GREEN}{data.decode('utf-8', 'ignore')}{self.__ANSI_RESET}"
+                        print(f"{human_time} >> {green_text}")
                 except Exception as e:
                     print(f"Error reading data: {e}")
             else:
@@ -71,17 +79,7 @@ class SerialWrap:
 
     def send_hex(self, data: str, end_fmt: str = "\r\n"):
         try:
-            # Convert each character in the string to its ASCII hex value
-            hex_data = "".join(
-                f"{ord(c):02X}" for c in data
-            )  # Convert each char to hex and concatenate
-
-            # Print the hex equivalent for debugging
-            print(f"Sending >> {hex_data}")
-
-            # Send the hex data over the serial interface, appending the end format
-            self.__ser.write(bytes.fromhex(hex_data))
-
+            self.__ser.write(data.encode("utf-8"))
         except ValueError:
             print(f"Error: '{data}' could not be converted to hex.")
 
@@ -93,47 +91,96 @@ class SerialWrap:
         except ValueError:
             print(f"Error: '{data}' could not be sent.")
 
-    def send_asci(self):
-        pass
+    def send_asci(self, data: str):
+        try:
+            print(f"Sending >> {data}")
+            self.__ser.write(data.encode("utf-8"))
+        except ValueError:
+            print(f"Error: '{data}' could not be converted to ASCII.")
 
-    def read_until(self, term=b"\x55"):
-        self.__ser.timeout = 3
+    def read_until(
+        self,
+        term=b"\x55",
+    ):
+        self.__ser.timeout = None
         data = self.__ser.read_until(term)
         return data
 
     def read_until_timeout(self, timeout=2):
-        self.__ser.timeout = timeout  # Set the timeout in seconds
-        end_time = time.time() + timeout
-        data = b""
+        """Reads data from the serial port until the specified timeout in seconds."""
+        self.__ser.timeout = None  # Disable internal timeout for manual handling
 
-        print(f"Reading data for up to {timeout} seconds...")
-        while time.time() < end_time:
-            try:
-                # Read one byte at a time
-                byte = self.__ser.read(1)
-                if byte:
-                    data += byte
-                else:
-                    # No data received, continue waiting
-                    pass
-            except SerialTimeoutException:
-                print("Read timeout.")
-                break
+        start_time = time.time()  # Record the start time data = b""
 
-        print("Finished reading.")
+        while time.time() - start_time < timeout:
+            if self.__ser.in_waiting > 0:  # If there's data available in the buffer
+                chunk = self.__ser.read(self.__ser.in_waiting)  # Read available data
+                if chunk:
+                    data += chunk
+            else:
+                time.sleep(0.01)  # Sleep briefly to avoid CPU overload
         return data
+
+    def read_bytes_in_array(self, timeout=1):
+        """Reads data from the serial port until the specified timeout in seconds."""
+        self.__ser.timeout = 0
+
+        start_time = time.time()
+        data = b""
+        data_len = 0
+
+        while time.time() - start_time < timeout:
+            data_len = self.__ser.in_waiting
+            if data_len > 0:
+                chunk = self.__ser.read(data_len)
+                if len(chunk) > 0:
+                    data += chunk
+
+        # print(f"Data received: {data}")
+        return len(data), data
+
+    def read_bytes(self, length: int):
+        self.__ser.timeout = 0
+        start_time = time.time()
+        data = b""
+        length = length * 2  # Convert to bytes
+
+        while len(data) < length:
+            data_len = self.__ser.in_waiting
+            if data_len > 0:
+                # Read as much as possible, but not more than needed to reach 500 bytes
+                chunk_size = min(data_len, length - len(data))
+                chunk = self.__ser.read(chunk_size)
+                if len(chunk) > 0:
+                    data += chunk
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+
+        # Limit the returned data to exactly 500 bytes (in case more than 500 bytes were read)
+        data = data[:length]
+
+        print(f"Data received: {len(data)} bytes")
+        print(f"Elapsed time: {round(elapsed_time, 0)} seconds")
+
+        return round(elapsed_time), len(data), data
 
     def close_port(self):
         if self.__ser is not None and self.__ser.is_open:
-            print(f"Flushing and closing port {self.__serail_port}")
+            print(f"Flushing and closing port {self.__serial_port}")
             self.__ser.flush()  # Ensure all data is sent
             self.__ser.close()  # Close the port
 
+    def flush_buffer(self):
+        self.__ser.reset_input_buffer()
+
 
 if __name__ == "__main__":
-    ser = SerialWrap("/dev/ttyUSB1", 115200)
+    ser = SerialWrap("/dev/ttyUSB0", 115200)
     ser.start_serial_rx_demon()
-    ser.send_hex("F")
+    # CONFIG <36 bytes uuid>
+    # S1-XXXXXX 36byte UUID Epoch Time"
+    ser.send_asci("FORMATSDCARD\r")
 
     while True:
         time.sleep(1)

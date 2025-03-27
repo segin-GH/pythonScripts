@@ -1,16 +1,30 @@
+#! /usr/bin/python3
+
 import asyncio
 import os
+import argparse
 from bleak import BleakClient, BleakScanner
 from rich.console import Console
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
 
-console = Console()
+
+parser = argparse.ArgumentParser(description="BLE Interactive CLI")
+parser.add_argument(
+    "-n",
+    "--name",
+    type=str,
+    default="BSS-12345678",
+    help="BLE device name e.g. BSS-12345678",
+)
+args = parser.parse_args()
 
 # Replace with your device's name or address
-DEVICE_NAME = "BSS-12345678"
+DEVICE_NAME = args.name
 CMD_CHARACTERISTIC_UUID = "0000FF01-0000-1000-8000-00805F9B34FB"  # Command UUID
+
+console = Console()
 
 
 def clear_screen():
@@ -59,7 +73,7 @@ async def interactive_ble():
 
         console.print(
             Panel(
-                "[bold green]Connected to device![/bold green]\nType commands to send.\n[italic]Type 'exit' to quit.[/italic]",
+                "[bold green]Connected to device![/bold green]\nType commands to send.\n[italic]Type 'exit' to quit.[/italic]\n[italic]Type `clear` to clear screen.[/italic]\n[italic]Type `p` to repeat previous command.[/italic]\n[italic]Type`r` to read response.[/italic]\n",
                 title="[bold cyan]BLE Interface[/bold cyan]",
             )
         )
@@ -75,15 +89,15 @@ async def interactive_ble():
                     if command == "clear":
                         clear_screen()
                         continue
-                    if command == "r":
+                    if command == "p":
                         command = previous_command
-                    if command == "w":
+
+                    if command == "r":
                         await receive_response(client)
                         continue
 
                     previous_command = command
                     await send_command(client, command)
-                    await asyncio.sleep(0.5)
                     await receive_response(client)
                 except Exception as e:
                     console.print(f"[bold red]Error in loop:[/bold red] {e}")

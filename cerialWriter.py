@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+# /usr/bin/env python3
 
 
 from serial import Serial
@@ -177,10 +177,19 @@ class SerialWrap:
 
 if __name__ == "__main__":
     ser = SerialWrap("/dev/ttyUSB0", 115200)
-    ser.start_serial_rx_demon()
+    # ser.start_serial_rx_demon()
     # CONFIG <36 bytes uuid>
     # S1-XXXXXX 36byte UUID Epoch Time"
-    ser.send_asci("FORMATSDCARD\r")
 
+    counter = 0
+    error = 0
+
+    uuid = "c9c3e575-9450-40db-93d8-d22b07c84ab5"
+    device_id = "S1-99999"
     while True:
+        # CONFIG d7ec18f3-fad7-4975-ae7a-45e92fcaa7df S1-12345 1740670496
+        cmd = f"CONFIG {uuid} {device_id} {int(time.time())}\n"
+        ser.send_asci(cmd)
         time.sleep(1)
+
+        break

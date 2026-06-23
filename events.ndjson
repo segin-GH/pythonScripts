@@ -1,0 +1,9 @@
+{"Timestamp": 1741850700, "Seq": 249, "EventType":"OCCUPANCY", "EventName":"BED_OCCUPANCY", "Value":"OFF_BED","Level":"INFO"}
+{"Timestamp": 1741850700, "Seq": 249, "EventType":"OCCUPANCY", "EventName":"BED_OCCUPANCY", "Value":"OFF_BED","Level":"INFO"}
+{"Timestamp":1741850700,"Seq":249,"EventName":"BED_OCCUPANCY","Value":"ON_BED","Level":"INFO"}
+{"Timestamp":1741850710,"Seq":250,"EventName":"BED_OCCUPANCY","Value":"OFF_BED","Level":"INFO"}
+{"Timestamp":1741850700,"Seq":249,"EventName":"BED_OCCUPANCY","Value":"ON_BED","Level":"INFO"}
+{"Timestamp":1741850710,"Seq":250,"EventName":"BED_OCCUPANCY","Value":"OFF_BED","Level":"INFO"}
+{"Timestamp":1741850710,"Seq":250,"EventName":"BED_OCCUPANCY","Value":"OFF_BED","Level":"INFO"}
+{"Timestamp":1741850710,"Seq":250,"EventName":"BED_OCCUPANCY","Value":"OFF_BED","Level":"INFO"}
+{"Timestamp": 1741850700, "Seq": 249, "EventType":"OCCUPANCY", "EventName":"BED_OCCUPANCY", "Value":"OFF_BED","Level":"INFO"}

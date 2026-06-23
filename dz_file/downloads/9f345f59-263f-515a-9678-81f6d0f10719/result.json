@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "device_id": "9d5f24f4-b5b5-41dd-80bd-d7e1cfdc4c45",
+      "from": "2026-04-04T00:00:00Z",
+      "job_id": "85fa9372-a8e4-4351-b5e2-f5e13b38374c",
+      "to": "2026-04-05T00:00:00Z",
+      "url": "https://dozee-mumbai.s3.ap-south-1.amazonaws.com/rawfiles/85fa9372-a8e4-4351-b5e2-f5e13b38374c.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAWA7YKQPLMTSQDTSW%2F20260404%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20260404T135446Z&X-Amz-Expires=900&X-Amz-Security-Token=FwoGZXIvYXdzEOf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDN3wV%2Fah%2B3O3jkhhbiKPBBfv8GFQWUCV2IBQynNQPAqc%2F7p4%2BeWLJZbp3tDWUCt1zh9STjIYVFmbxoPeG%2Ff6cY93jR7aeySZZJAzFzHNZUMz3zIt6GuW7ekJxyrIeJLaFCvDdPKCT5NFhFE7GQ5mhS0PyHYvK5Gg32NGePUeSqS6hQ%2FtOep8ZDhTa9fKMFAzXUjlHsz%2BXqRsjLALjVjM05yY0kRi7Gk3dw56yd55fpzX1oglc2RtcpSsxoZkGj116a8rjIf5eFTST53HEyIlECFVXeVqex24qmK4Go6gq98XaMpLmxFWwsf7Ia9pQpjI%2FVUlz1kWdaOQzf6nWKQL1xvAH19QloNpfwqp67anBa4%2FtkfO5Hqb5WMS1tpj0L7iQzFj7sgDtjrJE3yA5eFLjydG3XdaX1i0RSyBxW8rJ4UhK91wclYnzAPlmuQ66oUMtEZ0P5oVKaE%2BXv0hbCcTgadzFug1bQFVk7h1v8pTIQZVgUQf3i4bPpFIpSWc0FM4PHbVvW88430sFVfdziLTUHvD0RaeDmQOkWooEBXKDZJ03ooDI%2B%2ByIOk92ibM9wLN4kJCMoKAMijEYs5DL5CXLiGi5fqLThiZ6mddrR2p8WpCy%2BCNLobZfDb3eB6e%2BH7wog%2FveRyR9ic73Pd81jqqIZ868k9A0lu0CbTCQ%2B%2B0eyQLJiI%2FJTuHQHPxMAoalc21VGrpKFDfQSxWG28oTAqXKKawxM4GMijuuKDgmeXTGGZ7HyK8t4gbIrKhoEr0Z4b2aDremXurM7O%2FpcsTcMVy&X-Amz-SignedHeaders=host&X-Amz-Signature=e0fd1d7a64c275db1cca00e70475c0d77f1a1b013ca67ab09c261123faa8321e"
+    }
+  ],
+  "request_id": "9f345f59-263f-515a-9678-81f6d0f10719",
+  "type": "request"
+}

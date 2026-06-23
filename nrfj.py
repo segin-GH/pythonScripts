@@ -37,7 +37,14 @@ def main():
         "-r", "--recover", help="Recover the specified core", action="store_true"
     )
     parser.add_argument("-f", "--file", help="Hex file to flash (*.hex)")
-    parser.add_argument("--pinreset", help="Reset the device only", action="store_true")
+
+    parser.add_argument(
+        "-p", "--pinreset", help="Reset the device only", action="store_true"
+    )
+
+    parser.add_argument("-e", "--eraseall", help="Erase all cores", action="store_true")
+
+    parser.add_argument("-a", "--all", help="To flash both cores", action="store_true")
 
     args = parser.parse_args()
 
@@ -90,6 +97,27 @@ def main():
         run_command(
             f"nrfjprog --pinreset -f NRF53 --snr {programmer_id}",
             "Manual reset requested",
+        )
+
+    if args.eraseall:
+        run_command(
+            f"nrfjprog --eraseall -f NRF53 --snr {programmer_id}",
+            "Erasing all cores",
+        )
+
+    if args.all:
+        # Flash net core
+        cmd = f"nrfjprog --program ./build/merged_CPUNET.hex --sectorerase --verify -f NRF53 --coprocessor CP_NETWORK --snr {programmer_id}"
+        run_command(cmd, "Flashing net core with merged_CPUNET.hex")
+
+        # Flash app core
+        cmd = f"nrfjprog --program ./build/merged.hex --sectorerase --verify -f NRF53 --qspisectorerase --snr {programmer_id}"
+        run_command(cmd, "Flashing app core with merged.hex")
+
+        # Reset after flashing both cores
+        run_command(
+            f"nrfjprog --pinreset -f NRF53 --snr {programmer_id}",
+            "Resetting device after flashing both cores",
         )
 
 
